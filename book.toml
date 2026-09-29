@@ -2,3 +2,17 @@
 title = "Persona Exporter"
 authors = ["0DoubleDare"]
 language = "en"
+
+[output.html]
+git-repository-url = "https://github.com/Persona-Team/persona-exporter-docs"
+additional-js = ["mermaid.min.js", "mermaid-init.js", "theme/tabs.js"]
+additional-css = ["src/custom.css", "theme/tabs.css"]
+
+[preprocessor]
+
+[preprocessor.tabs]
+command = "mdbook-tabs"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
