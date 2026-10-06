@@ -17,16 +17,16 @@ C:\ProgramData\PersonaMetrics\PersonaExporter\config.yaml
 {{#endtabs}}
 
 Как вы могли заметить формат файла конфигурации **.yaml** что полезно так как в файле используется
-большая вложенность параметров. По умолчанию (при условии что вы запустили экспортер от имени
-суперпользователя) все директории создадутся сами и в конфиг запишется шаблон для **InfluxDB**
+большая вложенность параметров. По умолчанию *(при условии что вы запустили экспортер от имени
+**суперпользователя**)* все директории создадутся сами и в конфиг запишется шаблон для **InfluxDB**
 
 ```yaml
 server:
   push:
     url: "https://localhost:8086/api/v2/write"
     http_headers:
-      Content-Type: "application/json"
-      Authorization: "text/plain; charset=utf-8"
+      Content-Type: "text/plain; charset=utf-8"
+      Authorization: "Authorization: Token ${INFLUX_DB_TOKEN}"
     # Your url params, out: https://example.com?example=true&user_id=3
     url_params:
       org: "nikita-group"
@@ -42,6 +42,7 @@ agent:
   send_model: "push"
 
 metrics:
+  # For Line Protocol
   global_tags:
     # variable_name: value
     hostname: "name-your-server-please"
@@ -68,4 +69,12 @@ metrics:
     enabled: true
 
 ```
+
+Также, как вы могли заметить в блоке http-заголовках
+```yaml
+Authorization: "Authorization: Token ${INFLUX_DB_TOKEN}"
+```
+Используется конструкция **${INFLUX_DB_TOKEN}**, где **INFLUX_DB_TOKEN** - это переменная
+окружения вашей операционной системы / текущей сессии. Это полезно, к примеру, для 
+секретных токенов авторизации которые лучше не "хард-кодить" прямо в файле конфигурации.
 

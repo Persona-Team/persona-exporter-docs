@@ -7,6 +7,7 @@ language = "en"
 git-repository-url = "https://github.com/Persona-Team/persona-exporter-docs"
 additional-js = ["mermaid.min.js", "mermaid-init.js", "theme/tabs.js"]
 additional-css = ["src/custom.css", "theme/tabs.css"]
+sidebar-header-nav = false
 
 [preprocessor]
 
@@ -15,4 +16,9 @@ command = "mdbook-tabs"
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
+
+[preprocessor.numbering]
+#code-block = true
+code = { enable = false }
+heading = { enable = false }
 
