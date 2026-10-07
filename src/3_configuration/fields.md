@@ -63,15 +63,15 @@ metrics:
 ---
 
 ### **`url`** {#server-push-url}
-* **Тип**: `string`
+**Тип**: `string`
 
-* **Полный путь**: `server.push.url`
+**Полный путь**: `server.push.url`
 
 **Пример:**: 
 ```yaml
-...
-url: http://example.com
-...
+server:
+  push:
+    url: http://example.com
 ``` 
 
 Полный URL-адрес эндпоинта, на который агент будет отправлять собранные метрики с помощью HTTP-запросов.
@@ -85,10 +85,11 @@ url: http://example.com
 
 **Пример**:
 ```yaml
-...
-Content-Type: "text/plain; charset=utf-8"
-Authorization : "Authorization: Token ${INFLUX_DB_TOKEN}"
-...
+server:
+  push:
+    http_headers:
+      Content-Type: "text/plain; charset=utf-8"
+      Authorization : "Authorization: Token ${INFLUX_DB_TOKEN}"
 ```
 Произвольные HTTP-заголовки, которые будут добавлены в каждый запрос при отправке метрик. 
 Используется для указания типов данных, токенов авторизации и прочего.
@@ -104,11 +105,12 @@ Authorization : "Authorization: Token ${INFLUX_DB_TOKEN}"
 
 **Пример**: 
 ```yaml
-...
-# Сформирует URl вида "http(s)://myurl?org=my-org&example=true"
-org: "my-org"
-example: "true"
-...
+server:
+  push:
+    url_params:
+      # Сформирует URl вида "http(s)://myurl?org=my-org&example=true"
+      org: "my-org"
+      example: "true"
 ```
 Параметры строки запроса *(Query parameters)*, которые автоматически добавляются к 
 конечному URL. Вы можете жестко прописать параметры вручную в [секции URL](#server-push-url),
@@ -118,36 +120,63 @@ example: "true"
 
 ---
 
-### `send_interval` : `integer` {#server-push-send-interval}
-* **По умолчанию:** `10`
+### `send_interval` {#server-push-send-interval}
+**Тип**: `interger`
+
+**Полный путь**: `server.push.send_interval`
+
+**По умолчанию:** `10`
 
 Интервал отправки собранных метрик на сервер (в секундах).
 
 ---
 
-# `agent` : `object` {#agent}
+# `agent` {#agent}
+**Тип**: `object`
 
 Общие настройки поведения и формата работы самого агента сбора метрик.
 
 ---
 
-## `data_type` : `string` {#agent-data-type}
-* **Допустимые значения:** `"line_protocol"`, `"json"`
-* **По умолчанию:** `"line_protocol"`
+## `data_type` {#agent-data-type}
+**Тип**: `enum (string)`
 
-Формат сериализации данных перед их отправкой.
+**Полный путь**: `agent.data_type`
+
+**Допустимые значения**: `"line_protocol"`, `"json"`
+
+**По умолчанию:** `"json"`
+
+**Пример**:
+```yaml
+agent:
+  data_type: "line_protocol"
+```
+
+Формат сериализации данных перед их отправкой. 
 
 ---
 
-## `send_model` : `string` {#agent-send-model}
-* **Допустимые значения:** `"push"`, `"pull"` *(в разработке)*
-* **По умолчанию:** `"push"`
+## `send_model` {#agent-send-model}
+**Тип**: `enum (string)`
 
+**Полный путь**: `agent.send_model`
+
+**Допустимые значения:** `"push"`, `"pull"` *(в разработке)*
+
+**По умолчанию:** `"push"`
+
+**Пример**:
+```yaml
+agent:
+  send_model: "push"
+```
 Режим распространения метрик. При значении `"push"` агент сам инициирует отправку данных на указанный `server.push.url`.
 
 ---
 
-# `metrics` : `object` {#metrics}
+# `metrics` {#metrics}
+**Тип**: `object`
 
 Глобальный конфигурационный блок для управления собираемыми метриками и системными компонентами.
 
