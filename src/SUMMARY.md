@@ -5,11 +5,14 @@
 
 # Работа с экспортером
 
+---
+
 - [Установка](2_install/README.md)
   - [Сборка из исходников](2_install/from_source.md)
 
   - [Linux](2_install/linux/main.md)
   - [Windows](2_install/windows.md)
+
 [//]: # (  - [Docker]&#40;2_install/docker.md&#41;)
 - [Конфигурация](3_configuration/README.md)
   - [Параметры](3_configuration/fields.md)
