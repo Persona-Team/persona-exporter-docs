@@ -45,6 +45,42 @@ metrics:
     enabled: true
 ```
 
+### Сводная таблица параметров конфигурации
+
+### Сводная таблица параметров конфигурации
+
+| Полный путь к параметру | Тип данных | Значение по умолчанию          | Краткое описание |
+| :--- | :--- |:-------------------------------| :--- |
+| [**`server`**](#server) | `object` | —                              | Корневой блок для настройки сетевого взаимодействия. |
+| [**`server.push`**](#server-push) | `object` | —                              | Настройки Push-модели отправки метрик. |
+| [**`server.push.url`**](#server-push-url) | `string` | `https://example.com`          | HTTP-эндпоинт для отправки метрик. |
+| [**`server.push.http_headers`**](#server-push-http-headers) | `HashMap` | —                              | HTTP-заголовки запроса (авторизация, типы данных). |
+| [**`server.push.url_params`**](#server-push-url-params) | `HashMap` | —                              | Параметры строки запроса (Query parameters). |
+| [**`server.push.send_interval`**](#server-push-send-interval) | `integer` | `10`                           | Интервал отправки метрик (в секундах). |
+| [**`agent`**](#agent) | `object` | —                              | Общие настройки поведения и работы агента. |
+| [**`agent.data_type`**](#agent-data-type) | `enum (string)` | `"json"`                       | Формат сериализации данных (`"line_protocol"`, `"json"`). |
+| [**`agent.send_model`**](#agent-send-model) | `enum (string)` | `"push"`                       | Режим распространения метрик (`"push"`, `"pull"`). |
+| [**`metrics`**](#metrics) | `object` | —                              | Глобальный блок управления собираемыми метриками. |
+| [**`metrics.global_tags`**](#metrics-global-tags) | `object` | `hostname: "name-your-server"` | Глобальные теги `ключ: значение` для маркировки метрик. |
+| [**`metrics.cpu`**](#metrics-cpu) | `object` | —                              | Настройки сбора метрик процессора. |
+| [**`metrics.cpu.enabled`**](#metrics-cpu-enabled) | `boolean` | `true`                         | Включение сбора метрик CPU. |
+| [**`metrics.memory`**](#metrics-memory) | `object` | —                              | Настройки сбора метрик оперативной памяти. |
+| [**`metrics.memory.enabled`**](#metrics-memory-enabled) | `boolean` | `true`                         | Включение сбора метрик RAM и swap. |
+| [**`metrics.system`**](#metrics-system) | `object` | —                              | Настройки сбора общих системных метрик. |
+| [**`metrics.system.enabled`**](#metrics-system-enabled) | `boolean` | `true`                         | Включение общих системных метрик (аптайм, load average). |
+| [**`metrics.disks`**](#metrics-disks) | `object` | —                              | Настройки сбора информации о дисках. |
+| [**`metrics.disks.enabled`**](#metrics-disks-enabled) | `boolean` | `true`                         | Включение сбора метрик дисков (свободное место, IOPS). |
+| [**`metrics.processes`**](#metrics-processes) | `object` | —                              | Конфигурация сбора статистики по процессам. |
+| [**`metrics.processes.enabled`**](#metrics-processes-enabled) | `boolean` | `true`                         | Включение мониторинга процессов. |
+| [**`metrics.processes.process_limit`**](#metrics-processes-process-limit) | `integer` | `5`                            | Максимальное количество процессов в финальном отчете. |
+| [**`metrics.processes.include_exporter_metrics`**](#metrics-processes-include-exporter-metrics) | `boolean` | `true`                         | Включение в статистику метрик самого экспортера. |
+| [**`metrics.processes.remove_dead_processes`**](#metrics-processes-remove-dead-processes) | `boolean` | `true`                         | Исключение из отчета завершенных процессов. |
+| [**`metrics.processes.sort_by`**](#metrics-processes-sort-by) | `enum (string)` | `"cpu_usage"`                  | Критерий сортировки процессов перед лимитированием. |
+| [**`metrics.network`**](#metrics-network) | `object` | —                              | Настройки сбора метрик о сетевом трафике. |
+| [**`metrics.network.enabled`**](#metrics-network-enabled) | `boolean` | `true`                         | Включение сбора метрик сети (входящий/исходящий трафик). |
+| [**`metrics.components`**](#metrics-components) | `object` | —                              | Настройки сбора метрик аппаратных компонентов. |
+| [**`metrics.components.enabled`**](#metrics-components-enabled) | `boolean` | `true`                         | Включение сбора метрик датчиков (температура, кулеры). |
+
 ---
 
 # **`server`** {#server}
@@ -66,6 +102,8 @@ metrics:
 **Тип**: `string`
 
 **Полный путь**: `server.push.url`
+
+**По умолчанию**: `https://example.com`
 
 **Пример:**: 
 ```yaml
@@ -293,28 +331,43 @@ metrics:
 
 ---
 
-### `remove_dead_processes` : `boolean` {#metrics-processes-remove-dead-processes}
-* **По умолчанию:** `true`
+### **`remove_dead_processes`** {#metrics-processes-remove-dead-processes}
+**Тип**: `boolean`
+**По умолчанию:** `true`
 
 Автоматически очищает и не отправляет данные о процессах, которые завершили свою работу 
 (перешли в состояние завершенных/зомби)к моменту итерации сбора.
 
 ---
 
-### `sort_by` : `string` {#metrics-processes-sort-by}
-* **Допустимые значения:** `"cpu_usage"`, `"memory"`, `"virtual_memory"`, `"run_time"`, `"start_time"`
-* **По умолчанию:** `"cpu_usage"`
+### **`sort_by`** {#metrics-processes-sort-by}
+**Тип**: `enum (string)`
 
-Критерий, по которому сортируется список процессов перед применением ограничения `process_limit`. Позволяет выявлять топ самых «прожорливых» процессов в системе.
+**Допустимые значения**: `"cpu_usage"`, `"memory"`, `"virtual_memory"`, `"run_time"`, `"start_time"`
+
+**По умолчанию**: `"cpu_usage"`
+
+**Полный путь**: `metrics.processes.sort_by`
+
+Критерий, по которому сортируется список процессов перед применением ограничения `process_limit`. 
+Позволяет выявлять топ самых «прожорливых» процессов в системе.
+
+см. также [process_limit](#metrics-processes-process-limit)
 
 ---
 
-## `network` : `object` {#metrics-network}
+## **`network`** {#metrics-network}
+**Тип**: `object`
 
-* **`enabled`** : `boolean` (по умолчанию: `true`) — Включает или выключает сбор метрик сетевых интерфейсов (трафик, пакеты, ошибки, скорость).
+**Полный путь**: `metrics.network`
+
+**`enabled`** : `boolean` (по умолчанию: `true`) — Включает или включает сбор метрик о сети (Кол-во входящего и исходящего трафика).
 
 ---
 
-## `components` : `object` {#metrics-components}
+## **`components`** {#metrics-components}
+**Тип**: `object`
 
-* **`enabled`** : `boolean` (по умолчанию: `true`) — Включает или выключает сбор метрик аппаратных компонентов (например, температура датчиков материнской платы, процессора, статус кулеров).
+**Полный путь**: `metrics.components`
+
+**`enabled`** : `boolean` (по умолчанию: `true`) — Включает или выключает сбор метрик аппаратных компонентов (например, температура датчиков материнской платы, процессора, статус кулеров).
